@@ -1,114 +1,1148 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-	<meta charset="UTF-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Advait Jain</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Advait Jain — backend engineer (Kafka, Golang, distributed systems, GenAI). An interactive résumé you drive from a terminal prompt.">
+<meta name="author" content="Advait Jain">
+<meta name="theme-color" content="#050709">
+<title>Advait Jain — Backend Engineer</title>
+
+<!-- DEPLOY: this is the one URL to change if you host it somewhere else -->
+<link rel="canonical" href="https://zoronium.github.io/">
+<meta property="og:type" content="profile">
+<meta property="og:url" content="https://zoronium.github.io/">
+<meta property="og:title" content="Advait Jain — Backend Engineer">
+<meta property="og:description" content="Backend engineer (Kafka, Golang, distributed systems, GenAI). An interactive résumé you drive from a terminal prompt.">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Advait Jain — Backend Engineer">
+<meta name="twitter:description" content="Backend engineer (Kafka, Golang, distributed systems, GenAI). An interactive résumé you drive from a terminal prompt.">
+
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='18' fill='%230a0d11'/><text y='.9em' x='.12em' font-size='74' fill='%23ffb86c' font-family='monospace'>&gt;</text></svg>">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<!-- Structured data: identity fields only. Keep in sync with the R object below. -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Advait Jain",
+  "jobTitle": "Backend Engineer",
+  "email": "mailto:aj.advaitj@gmail.com",
+  "url": "https://zoronium.github.io/",
+  "address": { "@type": "PostalAddress", "addressLocality": "Delhi", "addressCountry": "IN" },
+  "alumniOf": { "@type": "CollegeOrUniversity", "name": "Guru Gobind Singh Indraprastha University" },
+  "knowsAbout": ["Golang", "Kafka", "Distributed Systems", "Event-Driven Architecture", "PostgreSQL", "Kubernetes", "Generative AI"],
+  "sameAs": [
+    "https://github.com/Zoronium",
+    "https://linkedin.com/in/advaitj",
+    "https://zoronium.hashnode.dev"
+  ]
+}
+</script>
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg-deep:#050709; --bg:#0a0d11; --bg-soft:#0e1217;
+    --fg:#d8d4ce; --fg-dim:#6b7585; --fg-faint:#2a303c;
+    --amber:#ffb86c; --amber-bright:#ffd09b;
+    --phosphor:#a3e635; --cyan:#67e8f9; --magenta:#f472b6;
+    --red:#ef4444; --green:#4ade80; --yellow:#facc15; --border:#1d2530;
+  }
+
+  html, body {
+    height:100%; background:var(--bg-deep); color:var(--fg);
+    font-family:'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+    font-size:14px; line-height:1.55; overflow:hidden;
+    -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+  }
+  body {
+    display:flex; flex-direction:column; position:relative;
+    background:
+      radial-gradient(ellipse 80% 50% at top, rgba(255,184,108,.05), transparent 70%),
+      radial-gradient(ellipse 60% 40% at bottom, rgba(103,232,249,.025), transparent 70%),
+      var(--bg-deep);
+  }
+  body::before {
+    content:''; position:fixed; inset:0; pointer-events:none; z-index:99;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/></filter><rect width='200' height='200' filter='url(%23n)' opacity='0.5'/></svg>");
+    mix-blend-mode:overlay; opacity:.06;
+  }
+
+  .crt-overlay { position:fixed; inset:0; pointer-events:none; z-index:100; transition:opacity .4s; }
+  .scanlines {
+    position:absolute; inset:0; opacity:.55; animation:scan 6s linear infinite;
+    background:repeating-linear-gradient(to bottom, rgba(0,0,0,0) 0px, rgba(0,0,0,0) 2px, rgba(0,0,0,.32) 3px, rgba(0,0,0,.32) 4px);
+  }
+  @keyframes scan { 0%{transform:translateY(0)} 100%{transform:translateY(4px)} }
+  .vignette { position:absolute; inset:0; background:radial-gradient(ellipse 110% 100% at center, transparent 45%, rgba(0,0,0,.55) 100%); }
+  .flicker { position:absolute; inset:0; background:rgba(255,184,108,.018); animation:flicker 7s infinite; }
+  @keyframes flicker { 0%,94%,100%{opacity:1} 95%{opacity:.82} 96%{opacity:1} 97%{opacity:.93} 98%{opacity:1} }
+
+  .status-bar {
+    display:flex; justify-content:space-between; align-items:center;
+    padding:5px 14px; background:linear-gradient(to bottom, var(--bg-soft), var(--bg));
+    border-bottom:1px solid var(--border); font-size:11px; color:var(--fg-dim);
+    flex-shrink:0; user-select:none; letter-spacing:.02em;
+  }
+  .status-group { display:flex; gap:16px; align-items:center; }
+  .status-item { display:inline-flex; align-items:center; gap:4px; white-space:nowrap; }
+  .status-item b { color:var(--amber); font-weight:500; }
+  .status-item .dot { width:7px; height:7px; border-radius:50%; background:var(--green); box-shadow:0 0 7px var(--green); animation:pulse 2s ease-in-out infinite; }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(.85)} }
+  .status-item.btn { cursor:pointer; }
+  .status-item.btn:hover b { color:var(--amber-bright); text-decoration:underline; }
+
+  .terminal { flex:1; display:flex; flex-direction:column; min-height:0; padding:14px 18px; position:relative; overflow:hidden; }
+  .output { flex:1; overflow-y:auto; overflow-x:hidden; padding-right:8px; padding-bottom:6px; scrollbar-width:thin; scrollbar-color:var(--border) transparent; }
+  .output::-webkit-scrollbar { width:6px; }
+  .output::-webkit-scrollbar-track { background:transparent; }
+  .output::-webkit-scrollbar-thumb { background:var(--border); border-radius:3px; }
+  .output::-webkit-scrollbar-thumb:hover { background:var(--fg-dim); }
+  .line { margin-bottom:2px; word-break:break-word; white-space:pre-wrap; }
+
+  .prompt-line { display:flex; align-items:center; gap:8px; padding-top:6px; border-top:1px solid var(--bg-soft); flex-shrink:0; }
+  .prompt { color:var(--green); text-shadow:0 0 8px rgba(74,222,128,.45); font-weight:500; flex-shrink:0; user-select:none; }
+  .prompt .path { color:var(--cyan); text-shadow:0 0 6px rgba(103,232,249,.4); }
+  .input-area { position:relative; flex:1; min-width:0; }
+  .input-display { pointer-events:none; color:var(--fg); }
+  .ghost-text { color:var(--fg-dim); opacity:.55; }
+  .block-cursor { display:inline-block; width:8px; height:17px; background:var(--amber); vertical-align:text-bottom; box-shadow:0 0 8px var(--amber); animation:blink 1.06s steps(2,end) infinite; margin:0 1px; }
+  @keyframes blink { 0%,49.999%{opacity:1} 50%,100%{opacity:0} }
+  #cmdInput { position:absolute; inset:0; width:100%; height:100%; background:transparent; border:none; outline:none; color:transparent; caret-color:transparent; font:inherit; z-index:2; cursor:text; padding:0; }
+
+  .error{color:var(--red);text-shadow:0 0 5px rgba(239,68,68,.4)} .success{color:var(--green)}
+  .info,.cyan{color:var(--cyan)} .warn,.yellow{color:var(--yellow)} .dim{color:var(--fg-dim)}
+  .amber{color:var(--amber)} .magenta{color:var(--magenta)} .phosphor{color:var(--phosphor)} .cmd-echo{color:var(--fg)}
+
+  .post { margin:8px 0 14px; }
+  .post h1,.post h2,.post h3 { color:var(--amber); font-weight:600; text-shadow:0 0 10px rgba(255,184,108,.4); line-height:1.3; margin:18px 0 8px; }
+  .post h1 { font-size:1.5em; letter-spacing:-.01em; padding-bottom:6px; border-bottom:1px solid var(--border); }
+  .post h2 { font-size:1.2em; } .post h3 { font-size:1.05em; color:var(--amber-bright); }
+  .post p { margin:8px 0; }
+  .post em { font-style:italic; opacity:.85; }
+  .post strong { color:var(--amber-bright); font-weight:600; }
+  .post code { color:var(--phosphor); background:rgba(163,230,53,.08); padding:1px 5px; border-radius:2px; font-size:.95em; border:1px solid rgba(163,230,53,.18); }
+  .post pre { margin:10px 0; background:var(--bg-soft); border:1px solid var(--border); border-radius:3px; padding:10px 12px; overflow-x:auto; }
+  .post pre code { display:block; padding:0; background:transparent; border:none; color:var(--fg); }
+  .post a, .link { color:var(--cyan); text-decoration:underline; text-underline-offset:2px; text-decoration-color:rgba(103,232,249,.4); }
+  .post a:hover, .link:hover { color:var(--magenta); text-decoration-color:var(--magenta); }
+  .post blockquote { border-left:2px solid var(--amber); padding:6px 0 6px 14px; margin:12px 0; color:var(--fg-dim); font-style:italic; background:rgba(255,184,108,.04); }
+  .post ul,.post ol { padding-left:22px; margin:8px 0; }
+  .post li { margin:3px 0; }
+  .post ul li::marker,.post ol li::marker { color:var(--amber); }
+  .divider { color:var(--fg-faint); margin:8px 0; overflow:hidden; }
+
+  .listing { display:flex; flex-wrap:wrap; gap:4px 22px; margin:4px 0; line-height:1.7; }
+  .file.dir { color:var(--cyan); font-weight:500; }
+  .file.dir::after { content:'/'; opacity:.7; }
+  .file.md { color:var(--amber); }
+  .file.hidden { color:var(--fg-dim); }
+
+  .man-page { border:1px solid var(--border); background:linear-gradient(to bottom, rgba(255,184,108,.025), rgba(255,184,108,.005)); padding:10px 14px; margin:8px 0; border-radius:2px; box-shadow:inset 0 0 30px rgba(255,184,108,.03); }
+  .man-page pre { font:inherit; white-space:pre-wrap; }
+
+  /* résumé blocks */
+  .job { margin:10px 0 14px; padding-left:12px; border-left:2px solid var(--border); }
+  .job:hover { border-left-color:var(--amber); }
+  .job .hd { display:flex; flex-wrap:wrap; gap:0 10px; align-items:baseline; }
+  .job .role { color:var(--amber); font-weight:600; }
+  .job .co { color:var(--cyan); }
+  .job .when { color:var(--fg-dim); font-size:.9em; margin-left:auto; }
+  .job ul { list-style:none; margin:6px 0 0; }
+  .job li { padding-left:16px; position:relative; margin:2px 0; }
+  .job li::before { content:'▸'; position:absolute; left:0; color:var(--amber); opacity:.7; }
+  .tagrow { margin-top:5px; display:flex; flex-wrap:wrap; gap:4px 6px; }
+  .tag { font-size:.85em; color:var(--phosphor); border:1px solid rgba(163,230,53,.22); background:rgba(163,230,53,.07); padding:0 6px; border-radius:2px; }
+  .skillrow { display:flex; gap:10px; margin:3px 0; flex-wrap:wrap; }
+  .skillrow .k { color:var(--amber); min-width:130px; }
+  .hit { background:rgba(255,184,108,.28); color:var(--amber-bright); }
+
+  .boot-line { color:var(--fg-dim); font-size:.95em; }
+  .boot-line .ok { color:var(--green); font-weight:500; }
+  .boot-line .warn { color:var(--yellow); font-weight:500; }
+  pre.tree, pre.neofetch { line-height:1.35; font-size:.95em; }
+  pre.neofetch.pixel { line-height:1; letter-spacing:0; font-size:1em; margin-bottom:6px; }
+
+  ::selection { background:rgba(255,184,108,.32); color:var(--amber-bright); }
+
+  @media (max-width:640px) {
+    html { font-size:12px; }
+    .terminal { padding:10px; }
+    .status-bar { font-size:10px; padding:4px 10px; }
+    .status-group { gap:10px; }
+    .status-item:not(.essential):not(:first-child) { display:none; }
+    .job .when { margin-left:0; width:100%; }
+  }
+  @media (prefers-reduced-motion:reduce) {
+    *,*::before,*::after { animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important; }
+  }
+
+  /* ============ PRINT: a real one-page résumé ============ */
+  #printable { display:none; }
+  @media print {
+    html, body { height:auto; overflow:visible; background:#fff; color:#111; font-size:10.5pt; }
+    body::before, .crt-overlay, .status-bar, .terminal { display:none !important; }
+    #printable { display:block; font-family:'JetBrains Mono', ui-monospace, monospace; padding:0; }
+    #printable h1 { font-size:19pt; letter-spacing:-.02em; margin-bottom:2pt; }
+    #printable .meta { font-size:9pt; color:#444; margin-bottom:8pt; }
+    #printable h2 { font-size:10pt; text-transform:uppercase; letter-spacing:.12em; border-bottom:1px solid #999; margin:12pt 0 5pt; padding-bottom:2pt; }
+    #printable .p-job { margin-bottom:8pt; page-break-inside:avoid; }
+    #printable .p-job .r { font-weight:700; }
+    #printable .p-job .w { float:right; color:#444; font-size:9pt; }
+    #printable ul { margin:3pt 0 0 14pt; }
+    #printable li { margin:1pt 0; }
+    #printable .p-tags { color:#444; font-size:9pt; }
+    #printable a { color:#111; text-decoration:none; }
+    @page { margin:14mm; }
+  }
+</style>
 </head>
-<link rel="stylesheet" href="style.css">
-<link rel="stylesheet" href="card.css">
-</link>
-
 <body>
+  <!-- Everything below is JS-driven, so this is what crawlers and no-JS
+       visitors get. Identity fields only — deliberately not a second copy
+       of the whole résumé, which would drift out of sync with R. -->
+  <noscript>
+    <style>
+      html, body { overflow: auto !important; height: auto !important; }
+      .crt-overlay, .status-bar, .terminal { display: none !important; }
+      .noscript-fallback { max-width: 46rem; margin: 0 auto; padding: 3rem 1.25rem; }
+      .noscript-fallback h1 { color: var(--amber); font-size: 1.6rem; margin-bottom: .25rem; }
+      .noscript-fallback p { margin: .75rem 0; }
+      .noscript-fallback a { color: var(--cyan); }
+      .noscript-fallback ul { list-style: none; margin-top: 1rem; }
+      .noscript-fallback li { margin: .3rem 0; }
+    </style>
+    <div class="noscript-fallback">
+      <h1>Advait Jain</h1>
+      <p class="dim">Backend Engineer — Delhi, India</p>
+      <p>Backend engineer with 1.5+ years on production event-driven systems and
+         orchestration layers: Kafka-based ERP routing, multi-database RBAC, and
+         real-time logistics APIs. National hackathon winner.</p>
+      <p><strong>This résumé is interactive and needs JavaScript.</strong>
+         With it enabled you get a terminal you can type into — <code>resume</code>
+         prints everything, <code>print</code> gives you a one-page PDF.</p>
+      <ul>
+        <li>Email: <a href="mailto:aj.advaitj@gmail.com">aj.advaitj@gmail.com</a></li>
+        <li>GitHub: <a href="https://github.com/Zoronium">github.com/Zoronium</a></li>
+        <li>LinkedIn: <a href="https://linkedin.com/in/advaitj">linkedin.com/in/advaitj</a></li>
+        <li>Blog: <a href="https://zoronium.hashnode.dev">zoronium.hashnode.dev</a></li>
+      </ul>
+    </div>
+  </noscript>
 
-	<header>
-		<div class="Share-button" link="https://zoronium.github.io">
+  <div class="crt-overlay" id="crtOverlay" aria-hidden="true">
+    <div class="scanlines"></div><div class="vignette"></div><div class="flicker"></div>
+  </div>
 
-			<svg width="16" height="16" viewBox="0 0 16 16" enable-background="new 0 0 24 24" class="sc-gKsewC iPWGYb">
-				<path fill-rule="evenodd" clip-rule="evenodd"
-					d="M10.6464 3.85347L11 4.20702L11.7071 3.49992L11.3536 3.14636L8.35355 0.146362H7.64645L4.64645 3.14636L4.29289 3.49992L5 4.20702L5.35355 3.85347L7.5 1.70702V9.49992V9.99992H8.5V9.49992V1.70702L10.6464 3.85347ZM1 5.49994L1.5 4.99994H4V5.99994H2V14.9999H14V5.99994H12V4.99994H14.5L15 5.49994V15.4999L14.5 15.9999H1.5L1 15.4999V5.49994Z"
-					fill="currentColor"></path>
-			</svg>
+  <header class="status-bar" role="banner">
+    <div class="status-group">
+      <span class="status-item essential"><span class="dot" aria-hidden="true"></span><b id="statusUser">user</b>@resume</span>
+      <span class="status-item essential">pwd: <b id="statusPath">~</b></span>
+    </div>
+    <div class="status-group">
+      <span class="status-item btn" id="btnPrint" title="print / save as PDF">[<b>print</b>]</span>
+      <span class="status-item">theme: <b id="statusTheme">amber</b></span>
+      <span class="status-item">crt: <b id="statusCrt">on</b></span>
+      <span class="status-item">sound: <b id="statusSound">off</b></span>
+      <span class="status-item essential" id="statusTime">--:--:--</span>
+    </div>
+  </header>
 
-	</header>
-	<div class="container">
-		<div class="image-container"><img src="https://avatars.githubusercontent.com/u/89680252?v=4" alt="Advait Jain">
-		</div>
-		<h1>@AdvaitJain</h1>
-		<div>
-			<p style="text-align: center;">
-				Hello I am Advait Jain
-				<br /> [ aka <span style="color: steelblue;">@Zoronium</span> ] , <br /><br />
-				I am Growing Dev and a student
-				<br />
-				Feel free to conect with me <br />
-				Lets disscuss the next Unicorn
-			</p>
-		</div>
-		<a class="tile" href="https://www.github.com/Zoronium">
-			<div class="icon">
-				<svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="50" height="50" viewBox="0 0 50 50">
-					<path
-						d="M17.791,46.836C18.502,46.53,19,45.823,19,45v-5.4c0-0.197,0.016-0.402,0.041-0.61C19.027,38.994,19.014,38.997,19,39 c0,0-3,0-3.6,0c-1.5,0-2.8-0.6-3.4-1.8c-0.7-1.3-1-3.5-2.8-4.7C8.9,32.3,9.1,32,9.7,32c0.6,0.1,1.9,0.9,2.7,2c0.9,1.1,1.8,2,3.4,2 c2.487,0,3.82-0.125,4.622-0.555C21.356,34.056,22.649,33,24,33v-0.025c-5.668-0.182-9.289-2.066-10.975-4.975 c-3.665,0.042-6.856,0.405-8.677,0.707c-0.058-0.327-0.108-0.656-0.151-0.987c1.797-0.296,4.843-0.647,8.345-0.714 c-0.112-0.276-0.209-0.559-0.291-0.849c-3.511-0.178-6.541-0.039-8.187,0.097c-0.02-0.332-0.047-0.663-0.051-0.999 c1.649-0.135,4.597-0.27,8.018-0.111c-0.079-0.5-0.13-1.011-0.13-1.543c0-1.7,0.6-3.5,1.7-5c-0.5-1.7-1.2-5.3,0.2-6.6 c2.7,0,4.6,1.3,5.5,2.1C21,13.4,22.9,13,25,13s4,0.4,5.6,1.1c0.9-0.8,2.8-2.1,5.5-2.1c1.5,1.4,0.7,5,0.2,6.6c1.1,1.5,1.7,3.2,1.6,5 c0,0.484-0.045,0.951-0.11,1.409c3.499-0.172,6.527-0.034,8.204,0.102c-0.002,0.337-0.033,0.666-0.051,0.999 c-1.671-0.138-4.775-0.28-8.359-0.089c-0.089,0.336-0.197,0.663-0.325,0.98c3.546,0.046,6.665,0.389,8.548,0.689 c-0.043,0.332-0.093,0.661-0.151,0.987c-1.912-0.306-5.171-0.664-8.879-0.682C35.112,30.873,31.557,32.75,26,32.969V33 c2.6,0,5,3.9,5,6.6V45c0,0.823,0.498,1.53,1.209,1.836C41.37,43.804,48,35.164,48,25C48,12.318,37.683,2,25,2S2,12.318,2,25 C2,35.164,8.63,43.804,17.791,46.836z">
-					</path>
-				</svg>
-			</div>
-			<p>Github</p>
-			<div class="tile-share" link="https://www.github.com/Zoronium">
-				<svg width="16" height="16" viewBox="0 0 16 16" enable-background="new 0 0 24 24"
-					class="sc-gKsewC iPWGYb">
-					<path fill-rule="evenodd" clip-rule="evenodd"
-						d="M10.6464 3.85347L11 4.20702L11.7071 3.49992L11.3536 3.14636L8.35355 0.146362H7.64645L4.64645 3.14636L4.29289 3.49992L5 4.20702L5.35355 3.85347L7.5 1.70702V9.49992V9.99992H8.5V9.49992V1.70702L10.6464 3.85347ZM1 5.49994L1.5 4.99994H4V5.99994H2V14.9999H14V5.99994H12V4.99994H14.5L15 5.49994V15.4999L14.5 15.9999H1.5L1 15.4999V5.49994Z"
-						fill="currentColor"></path>
-				</svg>
-			</div>
-		</a>
-		<a href="https://advait-jain.vercel.app/" class="tile">
-			<div class="icon"><img src="https://img.icons8.com/3d-fluency/44/null/person-male--v1.png" /></div>
-			<p>Website</p>
-			<div class="tile-share" link="https://zoronium.github.io"><svg width="16" height="16" viewBox="0 0 16 16"
-					enable-background="new 0 0 24 24" class="sc-gKsewC iPWGYb">
-					<path fill-rule="evenodd" clip-rule="evenodd"
-						d="M10.6464 3.85347L11 4.20702L11.7071 3.49992L11.3536 3.14636L8.35355 0.146362H7.64645L4.64645 3.14636L4.29289 3.49992L5 4.20702L5.35355 3.85347L7.5 1.70702V9.49992V9.99992H8.5V9.49992V1.70702L10.6464 3.85347ZM1 5.49994L1.5 4.99994H4V5.99994H2V14.9999H14V5.99994H12V4.99994H14.5L15 5.49994V15.4999L14.5 15.9999H1.5L1 15.4999V5.49994Z"
-						fill="currentColor"></path>
-				</svg></div>
-		</a>
-		<a href="https://twitter.com/codewithzoro" class="tile">
-			<div class="icon">
-				<img
-					src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAACXBIWXMAAAsTAAALEwEAmpwYAAAEiElEQVR4nO2YX2hbVRzHb7dB06ZtcvOn+d+0adqsnS8i4lCGbOCDQxmC+OCDgoL4DwVRZCjENm3aJs2/Jrlp2jTpvxWcCHPK3mQPjvogdQ8DN+ySm383N703f5t2jJXtJzeKOHFpbnOTTsgHfo+X3+d7OOfccw6CNGnSpEmT/xtajHpS7aMdKi91Q+mhCkovdUfhpjYVM+llmZt8CQFoedS3qJPoqaqJYW1XqQ0Bj0txnT8n0GCZNQ1GPVBjNKi8TFGg9FCgcG+VSz6TBpmT/FnuSg3/81uRLX1SNJ28JLIStqqaDa2WgkMrO98iF+EoF/IaN61UY5mbGh8NFeVdaeh2kkzlpU7yQ4mdmJXYUjGxjQCRlchKLbh832b6K9A6tLJTGl7dgaGVUuj5q3CsFnltCOepscwvLORB6iBBYk+Vqyw/ndwTW4hzVTU8sbL7NCP/VwA4vlS6/JQf2g8aQI3Rn9Uij04nd1Br8jVm9FFL7D3hZOJ8pXWCDK3unvtbfvnPMiwVrxsCRQNreyMc02A0ffCRJwC1Jm4KrcmE0JIAoSV+C50MCyr2HF4unXlYfhsGF7dhIFTc0YcK7yJGOFKtv8pLn65FXjSdBNSaBEZeYIknOs3JwX2bDlwo6P4tP7hYZAKAPlgA/UJhoy+YO1VVAIz6iAt5oSW+IZ6KKasbNiMcOb5cwv9TPliA/oU86AJ56J3P/6Sdy79SaadSeWlT7fKJsMxK8hE2GJa2v6gk3zfPVA5653LQM5uhtP6MX+ujzvZgBfThANTHNcpD12R8A2GLfiXTNbhYDO8nr/Vny9UzmwGNLwPln5SXuqXyUN+pPJRH4aa+qUVeMFUOcI11gHKIUPGkPljYrVq+pn2eeJQ8dJhjV9iJBwuvD4SKF/XB3Mv6hfyr/Qu59GHJd07EodMcnWUb4AVW06ae8hMxaDdHP2UVwBCgO/uD+XuPg3yHOQb8cfw0whZdIPf1YyE/Fr2HGAn2x5j+ueyJ3vnc3cMd+Si0j+M/Igelby73wWHK88ej0DaGv4/UgnY2+4nWn9k7DPl2E36Xb7zdjdRKjz/7rBqjrzVUfgyHNlMkxIE8pVAxRwTf1nNqjDIqPVS2QfL3+eO3n+DmHuujS40deZypJYQrVN7M+QbLF3mmTQ1nAZjjstKz9UOD5KF1NPIOwjXMeVzu3rpcb3neaPhSxftuTQC0yFzkW92uNF4X+ZHwb4jx9y6k7lyEoxI7cUrqID8X21LXOZk2I+FoqxHvRRqFwIELxfZUQGIjHnAjH9M1RFwxTUgkjtSXYjuxxc2CDa/zx8Oyukp329M6mZN8W+pMrUkc5B1u5nzkPm8k7ESMOIfvrwAtKg91ltlt5DNb63IXuSlzkiWuFyxvFL/BGwlX9SxzIJTupFjmIu11kN/kjUbeYPMwVvPeL3Wm3pTaU1eZxXqg8/wYnmszRS60mqJn6re/V4FgIoai1tSLqJX4SmRNfI9aEr8KpuJRgSVeEkzF9zon47mOiXi4YyK2zjfHAsw9ts0ceYar5/kmTZo0aYLUgz8AFq4opyH4XtoAAAAASUVORK5CYII=">
-			</div>
-			<p>Twitter</p>
-			<div class="tile-share" link="https://twitter.com/codewithzoro">
-				<svg width="16" height="16" viewBox="0 0 16 16" enable-background="new 0 0 24 24"
-					class="sc-gKsewC iPWGYb">
-					<path fill-rule="evenodd" clip-rule="evenodd"
-						d="M10.6464 3.85347L11 4.20702L11.7071 3.49992L11.3536 3.14636L8.35355 0.146362H7.64645L4.64645 3.14636L4.29289 3.49992L5 4.20702L5.35355 3.85347L7.5 1.70702V9.49992V9.99992H8.5V9.49992V1.70702L10.6464 3.85347ZM1 5.49994L1.5 4.99994H4V5.99994H2V14.9999H14V5.99994H12V4.99994H14.5L15 5.49994V15.4999L14.5 15.9999H1.5L1 15.4999V5.49994Z"
-						fill="currentColor"></path>
-				</svg>
-			</div>
-		</a>
+  <main class="terminal" role="main">
+    <div class="output" id="output" aria-live="polite" aria-label="terminal output" tabindex="-1"></div>
+    <div class="prompt-line">
+      <span class="prompt" id="promptText" aria-hidden="true"></span>
+      <div class="input-area">
+        <div class="input-display" aria-hidden="true"><span id="typedText"></span><span class="block-cursor"></span><span class="ghost-text" id="ghostText"></span></div>
+        <input type="text" id="cmdInput" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="terminal command input" autofocus>
+      </div>
+    </div>
+  </main>
 
-		<a href="https://www.linkedin.com/in/advaitj/" class="tile">
-			<div class="icon"><img
-					src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAACXBIWXMAAAsTAAALEwEAmpwYAAACEklEQVR4nO2YO08CQRDH11jYGisTW7X1E1jZKcTSL2EQJHJbEAsJiZ2FhZ2FpbWFDY/IO0YN3GIEiQWFxhhBER8oMGZvFVC4wJ3mbi/ZfzIh7GyW+e3Mzh2LkJCQkBDfkrKLSCJhhEkVYQIGWRVhEkKSbP9b8FjeNDBoUDG//p03P3hgJtt0AChlw0HwBJBEgjoA5CeOMlDRDqC2mCcNyJUEtBJjn/S7ERCapRL8tC8FR5dlqNbqECmUYWojZQyEZvVaxJVUgu5UOF9mmbAEwEpM2flOPb3VWTlZAsBl9Qx42BmgEDQToXwJJi11BrDVu5AzAcgR7TY63s8vZQC5j9tznF8bsHZK+7xBAI4I9BId7+ef8CZhK1iE7HUVXt8b8PDyoZTi8n4ORtyJ/pk0E2DGn4LbSg3UdFKswLg3ybLEI0Dh7gX6KZQvwZArzifAoJrfyaiXkpkAjWZTqf+57TQs7WYhcFHqOW8vdcMOOm8A6wdXLDBa4540DK8m4PD8vmte7va53dF4AhjD8Z+t0pOG2a2zrnmPrx/qryVmATSbHf6WyTAqJVTmRvkCYP6o9rWwACAiA98SJYTFISaiCyHRRv/lH1mcPWh+Gx0fxK9lLfzXBxlPV4uS/KgdgN7Pmx04br07BfRkwM5PBjIL2gFYFvymB4+JT1/wLQjZptzPG3kmJPpbckD/zgsJCQkhg/QJ3PVUWJ5Zt98AAAAASUVORK5CYII=">
-			</div>
-			<p>Linkedin</p>
-			<div class="tile-share" link="https://www.linkedin.com/in/advaitj/"><svg width="16" height="16"
-					viewBox="0 0 16 16" enable-background="new 0 0 24 24" class="sc-gKsewC iPWGYb">
-					<path fill-rule="evenodd" clip-rule="evenodd"
-						d="M10.6464 3.85347L11 4.20702L11.7071 3.49992L11.3536 3.14636L8.35355 0.146362H7.64645L4.64645 3.14636L4.29289 3.49992L5 4.20702L5.35355 3.85347L7.5 1.70702V9.49992V9.99992H8.5V9.49992V1.70702L10.6464 3.85347ZM1 5.49994L1.5 4.99994H4V5.99994H2V14.9999H14V5.99994H12V4.99994H14.5L15 5.49994V15.4999L14.5 15.9999H1.5L1 15.4999V5.49994Z"
-						fill="currentColor"></path>
-				</svg></div>
-		</a>
+  <div id="printable"></div>
 
+<script>
+'use strict';
 
-		<a href="https://zoronium.hashnode.dev/" class="tile">
-			<div class="icon"><img src="https://img.icons8.com/3d-fluency/44/null/megaphone.png" /></div>
-			<p>Blog</p>
-			<div class="tile-share" link="https://zoronium.hashnode.dev/"><svg width="16" height="16"
-					viewBox="0 0 16 16" enable-background="new 0 0 24 24" class="sc-gKsewC iPWGYb">
-					<path fill-rule="evenodd" clip-rule="evenodd"
-						d="M10.6464 3.85347L11 4.20702L11.7071 3.49992L11.3536 3.14636L8.35355 0.146362H7.64645L4.64645 3.14636L4.29289 3.49992L5 4.20702L5.35355 3.85347L7.5 1.70702V9.49992V9.99992H8.5V9.49992V1.70702L10.6464 3.85347ZM1 5.49994L1.5 4.99994H4V5.99994H2V14.9999H14V5.99994H12V4.99994H14.5L15 5.49994V15.4999L14.5 15.9999H1.5L1 15.4999V5.49994Z"
-						fill="currentColor"></path>
-				</svg></div>
+/* ======================================================================
+   ▼▼▼  EDIT ONLY THIS OBJECT.  Everything else renders from it.  ▼▼▼
+   ====================================================================== */
+const R = {
+  handle:   'advait',                      // shell username
+  name:     'Advait Jain',
+  title:    'Software Engineer — Backend, Distributed Systems & GenAI',
+  location: 'Delhi, India',
+  email:    'aj.advaitj@gmail.com',
+  phone:    '',
+  links: {
+    github:   'https://github.com/Zoronium',
+    linkedin: 'https://linkedin.com/in/advaitj',
+    website:  '',                                 // this page IS zoronium.github.io — no self-link
+    blog:     'https://zoronium.hashnode.dev',
+  },
+  summary:
+`Backend-focused engineer, 1.5+ years building production event-driven systems
+and orchestration layers — high-concurrency APIs, cloud-native infra, and
+applied GenAI, with a habit of turning messy requirements into systems that
+scale without babysitting.
 
-		</a>
+Built most of the backend for a Kafka-based ERP: an orchestration engine that
+routes one request across several downstream services, multi-database RBAC,
+and real-time logistics APIs serving 50+ vehicles — cutting manual dispatch
+effort by ~30% and lifting auth reliability by ~40%.
 
-	</div>
-	<script type="text/javascript" src="app.js"></script>
+National hackathon winner. Currently going deeper on Golang, distributed
+systems, chaos engineering, and real-time voice agents. Open to Backend
+Engineer / SDE-1 roles where system design depth and ownership actually matter.
+
+> Let's build systems that actually scale.`,
+
+  focus: ['Golang', 'distributed systems', 'chaos engineering', 'real-time voice AI', 'agent systems'],
+
+  experience: [
+    {
+      id: 'employgenai',
+      company: 'EmployGenAI (stealth)',
+      role: 'Backend Engineer',
+      period: 'Jan 2025 — present',
+      location: 'Remote, India',
+      stack: ['Node.js', 'TypeScript', 'Golang', 'FastAPI', 'GraphQL', 'Kafka', 'PostgreSQL', 'MongoDB'],
+      bullets: [
+        'Ops Dispatch Engine (SCDRS-ODE) — Kafka-based orchestration engine routing each request to 1–3 downstream services via dynamic context modifiers and score-based rule matching. The ERP’s central event brain.',
+        'Real-time fleet-tracking APIs (Node.js + GraphQL) with assignment logic optimizing distance, cost, and fuel across 50+ active vehicles; cut manual dispatch effort ~30%.',
+        'Event-driven trip/driver-state pipeline on Kafka, decoupling logistics services; notification layer for real-time + async delivery (in-app, push, service events).',
+        'REST admin APIs (Express) for runtime business-rule management with no redeploy, plus a GL posting pipeline with schema-validated (EventSchema) passthrough to finance — replacing a rigid static CRUD transaction system.',
+        'Multi-level BOM engine: variant-based component resolution and cost rollup across graphs up to 8 levels deep. Load testing put graph traversal query time as the limiting factor past 10M SKUs.',
+        'Manufacturing routing and procurement planning: work-centre sequencing under capacity constraints, automated PR/PO generation from demand signals.',
+        'Multi-database RBAC auth across web and mobile — auth reliability up ~40%.',
+        'Shipped a School Management & Redressal System (academics, finance, HR, grievance workflows) on the same platform.',
+      ],
+    },
+    {
+      id: '4wheels',
+      company: '4Wheels India',
+      role: 'Software Engineer Intern',
+      period: 'Apr 2024 — Sep 2024',
+      location: 'India',
+      stack: ['React Native', 'Expo', 'Backend Systems'],
+      bullets: [
+        'Scaled React Native infrastructure for a van booking and fleet management platform handling 1,000+ daily transactions.',
+        'Built a mock-user load simulation framework; validated backend scalability to 5x projected traffic.',
+      ],
+    },
+    {
+      id: 'graphql-internship',
+      company: 'Stealth Startup',
+      role: 'Software Engineer Intern',
+      period: 'Jul 2023 — Aug 2023',
+      location: 'Remote',
+      stack: ['GraphQL', 'Next.js', 'Node.js', 'Apollo Client'],
+      bullets: [
+        'Optimized GraphQL queries, cutting API call volume ~20% and improving app performance.',
+        'Built a reusable Next.js UI component, cutting future dev time on similar features.',
+        'Shipped a Node.js feature that measurably improved user engagement.',
+      ],
+    },
+  ],
+
+  projects: [
+    {
+      id: 'scdrs',
+      name: 'SCDRS — Supply Chain Disruption Response System',
+      lang: 'Python',
+      link: 'https://github.com/Zoronium',
+      desc: '8-node LangGraph multi-agent graph for supply chain disruption analysis.',
+      bullets: [
+        'Nodes: input validation → disruption classification → impact scoring → supplier risk → mitigation planning → human review → recommendation → audit output.',
+        'CrewAI supplier-risk sub-team embedded as a nested agent.',
+        'Human-in-the-loop interrupt/resume with SqliteSaver checkpointing; operator.add merge semantics for fault-tolerant re-entry.',
+        'Inference on Groq (llama-3.3-70b-versatile), retrieval over ChromaDB.',
+      ],
+    },
+    {
+      id: 'voice-agents',
+      name: 'Voice AI Agents',
+      lang: 'Python',
+      link: '',
+      desc: 'Dual-mode voice agents — local for privacy, Groq cloud for scale.',
+      bullets: [
+        '70% lower latency than a standard cloud-only setup.',
+        'FastAPI service; Moonshine for speech, Ollama locally, Groq for the hosted path.',
+      ],
+    },
+  ],
+
+  skills: {
+    'Languages':     ['Golang', 'Python', 'TypeScript', 'JavaScript', 'Java', 'Rust', 'C/C++'],
+    'Backend':       ['Node.js', 'FastAPI', 'Django', 'Express', 'GraphQL', 'REST', 'Kafka', 'microservices', 'event-driven architecture'],
+    'Databases':     ['PostgreSQL', 'MongoDB', 'MySQL', 'Redis'],
+    'Cloud & DevOps':['AWS', 'Docker', 'Kubernetes', 'CI/CD', 'Git'],
+    'AI / GenAI':    ['LangGraph', 'CrewAI', 'LLM APIs', 'Groq', 'Ollama', 'RAG', 'agent systems'],
+    'Frontend':      ['React', 'Next.js', 'React Native'],
+  },
+
+  education: [
+    { school: 'Guru Gobind Singh Indraprastha University (Bharati Vidyapeeth College of Engineering)', degree: 'B.Tech, Information Technology', period: 'Oct 2021 — Jul 2025', notes: 'Minor in Data Science. Delhi, India.' },
+  ],
+
+  awards: [
+    { what: 'National Winner, Microsoft Hackathon', org: 'Microsoft', period: '', note: 'Vision-based AI accessibility solution for visually impaired users.' },
+    { what: 'R&D Member → Technical Lead → Vice President', org: 'EduMinerva', period: 'Jan 2022 — Apr 2025', note: 'Led a 120+ member org; ran 10+ events incl. a 1,500+ participant national hackathon and the inaugural placement bootcamp (100+ attendees). Engagement up 27%.' },
+    { what: 'Core Member → Community Lead', org: 'MLSAC-BVP', period: 'Jun 2022 — Jul 2024', note: 'Ran ~10 technical events (100+ attendees); participated in Microsoft Ignite 2022 community activities; completed the 100 Days of Code challenge.' },
+  ],
+
+  certifications: [
+    'Learning Spring with Spring Boot',
+    'JavaScript Algorithms and Data Structures',
+    'Java Essential Training',
+    'Rust Essential Training',
+    'Django Essential Training',
+  ],
+
+  speaks: ['English (professional)', 'Hindi (native)', 'German (elementary)'],
+};
+/* ======================================================================
+   ▲▲▲  END EDIT ZONE  ▲▲▲
+   ====================================================================== */
+
+const README = `# README.md
+
+this résumé is a terminal. it is also the only page.
+
+type \`help\` for commands, or just:
+
+  \`whoami\`       who I am, in one screen
+  \`experience\`   where I have worked
+  \`projects\`     things I built because I wanted to
+  \`skills\`       the honest list
+  \`resume\`       everything at once
+  \`print\`        a clean one-page PDF (Ctrl+P works too)
+  \`grep <term>\`  search everything above — try \`grep kafka\`
+
+> in a hurry? \`resume\` then \`print\`. that is the whole pitch.`;
+
+// =================== STATE ===================
+const state = { cwd:'~', history:[], historyIndex:-1, sound:false, crt:true, theme:'amber', bootTime:Date.now() };
+try { const s = JSON.parse(localStorage.getItem('rsHistory')||'[]'); if (Array.isArray(s)) state.history = s.slice(-100); } catch(e){}
+try { const t = localStorage.getItem('rsTheme'); if (t) state.theme = t; } catch(e){}
+
+const THEMES = {
+  amber: { phosphor:'#ffb86c', bright:'#ffd09b' },
+  green: { phosphor:'#a3e635', bright:'#d4f881' },
+  cyan:  { phosphor:'#67e8f9', bright:'#a5f3fc' },
+  paper: { phosphor:'#e8e2d6', bright:'#ffffff' },
+};
+function applyTheme(name) {
+  const t = THEMES[name]; if (!t) return;
+  document.documentElement.style.setProperty('--amber', t.phosphor);
+  document.documentElement.style.setProperty('--amber-bright', t.bright);
+  state.theme = name;
+  $('statusTheme').textContent = name;
+  try { localStorage.setItem('rsTheme', name); } catch(e){}
+}
+
+// =================== DOM / UTIL ===================
+const $ = id => document.getElementById(id);
+const output = $('output'), cmdInput = $('cmdInput'), typedText = $('typedText'), ghostText = $('ghostText');
+const promptText = $('promptText'), statusPath = $('statusPath'), statusTime = $('statusTime');
+
+const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+const scrollBottom = () => { output.scrollTop = output.scrollHeight; };
+function writeLine(html, cls='') {
+  const d = document.createElement('div');
+  d.className = 'line' + (cls ? ' '+cls : '');
+  d.innerHTML = html; output.appendChild(d); scrollBottom(); return d;
+}
+const printBlank = () => writeLine('&nbsp;');
+const rule = (n=74) => '<span class="dim">'+'─'.repeat(n)+'</span>';
+
+// =================== AUDIO ===================
+let audioCtx;
+function ensureAudio() {
+  if (!audioCtx) { try { audioCtx = new (window.AudioContext||window.webkitAudioContext)(); } catch(e){ audioCtx = null; } }
+  if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+}
+function beep(freq, type, gainVal, dur) {
+  if (!state.sound) return; ensureAudio(); if (!audioCtx) return;
+  const now = audioCtx.currentTime, osc = audioCtx.createOscillator(), g = audioCtx.createGain();
+  osc.type = type; osc.frequency.setValueAtTime(freq, now);
+  g.gain.setValueAtTime(gainVal, now); g.gain.exponentialRampToValueAtTime(.0001, now+dur);
+  osc.connect(g); g.connect(audioCtx.destination); osc.start(now); osc.stop(now+dur+.01);
+}
+const playClick = () => beep(1700 + Math.random()*500, 'square', .018, .025);
+const playBell  = () => beep(760, 'sine', .04, .35);
+
+// =================== MARKDOWN ===================
+function inlineMd(t) {
+  return t
+    .replace(/\*\*([^*]+)\*\*/g,'<strong>$1</strong>')
+    .replace(/\*([^*\n]+)\*/g,'<em>$1</em>')
+    .replace(/`([^`]+)`/g,'<code>$1</code>')
+    .replace(/\[([^\]]+)\]\(([^)]+)\)/g,'<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
+}
+function renderMarkdown(md) {
+  const lines = esc(md).split('\n'); const out = [];
+  let inUl=false, inOl=false, inCode=false, para=[];
+  const flush = () => { if (para.length) { out.push('<p>'+para.join(' ')+'</p>'); para=[]; } };
+  const closeLists = () => { if (inUl){out.push('</ul>');inUl=false;} if (inOl){out.push('</ol>');inOl=false;} };
+  for (const line of lines) {
+    if (/^```/.test(line)) {
+      if (inCode) { out.push('</code></pre>'); inCode=false; }
+      else { flush(); closeLists(); out.push('<pre><code>'); inCode=true; }
+      continue;
+    }
+    if (inCode) { out.push(line); continue; }
+    if (!line.trim()) { flush(); closeLists(); continue; }
+    let m;
+    if (m = line.match(/^### (.+)$/)) { flush(); closeLists(); out.push('<h3>'+inlineMd(m[1])+'</h3>'); }
+    else if (m = line.match(/^## (.+)$/)) { flush(); closeLists(); out.push('<h2>'+inlineMd(m[1])+'</h2>'); }
+    else if (m = line.match(/^# (.+)$/)) { flush(); closeLists(); out.push('<h1>'+inlineMd(m[1])+'</h1>'); }
+    else if (m = line.match(/^&gt; (.+)$/)) { flush(); closeLists(); out.push('<blockquote>'+inlineMd(m[1])+'</blockquote>'); }
+    else if (m = line.match(/^(\d+)\. (.+)$/)) { flush(); if(inUl){out.push('</ul>');inUl=false;} if(!inOl){out.push('<ol>');inOl=true;} out.push('<li>'+inlineMd(m[2])+'</li>'); }
+    else if (m = line.match(/^[-*] (.+)$/)) { flush(); if(inOl){out.push('</ol>');inOl=false;} if(!inUl){out.push('<ul>');inUl=true;} out.push('<li>'+inlineMd(m[1])+'</li>'); }
+    else if (/^---+$/.test(line)) { flush(); closeLists(); out.push('<div class="divider">'+'─'.repeat(72)+'</div>'); }
+    else para.push(inlineMd(line));
+  }
+  flush(); closeLists(); if (inCode) out.push('</code></pre>');
+  return out.join('');
+}
+const md = s => writeLine('<div class="post">'+renderMarkdown(s)+'</div>');
+
+// =================== RENDERERS ===================
+function tagRow(arr) {
+  if (!arr || !arr.length) return '';
+  return '<div class="tagrow">'+arr.map(t=>'<span class="tag">'+esc(t)+'</span>').join('')+'</div>';
+}
+function jobHtml(j) {
+  return '<div class="job"><div class="hd">'
+    + '<span class="role">'+esc(j.role)+'</span><span class="dim">@</span><span class="co">'+esc(j.company)+'</span>'
+    + (j.location ? '<span class="dim">· '+esc(j.location)+'</span>' : '')
+    + '<span class="when">'+esc(j.period)+'</span></div>'
+    + '<ul>'+j.bullets.map(b=>'<li>'+esc(b)+'</li>').join('')+'</ul>'
+    + tagRow(j.stack) + '</div>';
+}
+function projHtml(p) {
+  const title = p.link
+    ? '<a class="link" href="'+esc(p.link)+'" target="_blank" rel="noopener noreferrer">'+esc(p.name)+'</a>'
+    : '<span class="role">'+esc(p.name)+'</span>';
+  return '<div class="job"><div class="hd">'
+    + '<span class="role">'+title+'</span><span class="dim">'+esc(p.desc)+'</span>'
+    + '<span class="when">'+esc(p.lang||'')+'</span></div>'
+    + (p.bullets && p.bullets.length ? '<ul>'+p.bullets.map(b=>'<li>'+esc(b)+'</li>').join('')+'</ul>' : '')
+    + '</div>';
+}
+function sectionHead(t) { writeLine('<span class="amber" style="font-weight:600">'+esc(t)+'</span> '+rule(74-t.length-1)); }
+
+// =================== VIRTUAL FS ===================
+function fsRoot() {
+  return [
+    { name:'experience', type:'dir' },
+    { name:'projects', type:'dir' },
+    { name:'skills.txt', type:'file', cls:'md' },
+    { name:'awards.txt', type:'file', cls:'md' },
+    { name:'certifications.txt', type:'file', cls:'md' },
+    { name:'education.txt', type:'file', cls:'md' },
+    { name:'README.md', type:'file', cls:'md' },
+    { name:'.contact', type:'file', cls:'hidden' },
+  ];
+}
+function listDir(p) {
+  if (p === '~') return fsRoot();
+  if (p === '~/experience') return R.experience.map(j => ({ name:j.id+'.md', type:'file', cls:'md' }));
+  if (p === '~/projects') return R.projects.map(x => ({ name:x.id+'.md', type:'file', cls:'md' }));
+  return null;
+}
+const isDir = p => p==='~' || p==='~/experience' || p==='~/projects';
+function resolvePath(input) {
+  if (!input || input === '~') return '~';
+  if (input === '.') return state.cwd;
+  if (input === '..') { if (state.cwd === '~') return '~'; const a = state.cwd.split('/'); a.pop(); return a.length===1?'~':a.join('/'); }
+  if (input.startsWith('~/')) return input;
+  if (input.startsWith('/')) return '~'+input;
+  return state.cwd === '~' ? '~/'+input : state.cwd+'/'+input;
+}
+function catFile(arg) {
+  const path = resolvePath(arg), base = path.split('/').pop().replace(/\.md$|\.txt$/,'');
+  if (path === '~/README.md') { md(README); return true; }
+  if (path === '~/.contact')  { COMMANDS.contact(); return true; }
+  if (path === '~/skills.txt'){ COMMANDS.skills(); return true; }
+  if (path === '~/education.txt'){ COMMANDS.education(); return true; }
+  if (path === '~/awards.txt')   { COMMANDS.awards(); return true; }
+  if (path === '~/certifications.txt') { COMMANDS.certifications(); return true; }
+  const j = R.experience.find(x => x.id === base);
+  if (j) { sectionHead(j.company); writeLine(jobHtml(j)); return true; }
+  const p = R.projects.find(x => x.id === base);
+  if (p) { sectionHead(p.name); writeLine(projHtml(p)); return true; }
+  return false;
+}
+
+// =================== COMMANDS ===================
+const COMMANDS = {};
+
+COMMANDS.whoami = () => {
+  const l = R.links;
+  md('# '+R.name+'\n\n**'+R.title+'** · '+R.location+'\n\n'+R.summary);
+  const bits = [];
+  bits.push('<span class="dim">email:</span> <a class="link" href="mailto:'+esc(R.email)+'">'+esc(R.email)+'</a>');
+  if (R.phone) bits.push('<span class="dim">phone:</span> '+esc(R.phone));
+  if (l.github)   bits.push('<span class="dim">github:</span> <a class="link" href="'+esc(l.github)+'" target="_blank" rel="noopener noreferrer">'+esc(l.github.replace(/^https?:\/\//,''))+'</a>');
+  if (l.linkedin) bits.push('<span class="dim">linkedin:</span> <a class="link" href="'+esc(l.linkedin)+'" target="_blank" rel="noopener noreferrer">'+esc(l.linkedin.replace(/^https?:\/\//,''))+'</a>');
+  if (l.website)  bits.push('<span class="dim">web:</span> <a class="link" href="'+esc(l.website)+'" target="_blank" rel="noopener noreferrer">'+esc(l.website.replace(/^https?:\/\//,''))+'</a>');
+  if (l.blog)     bits.push('<span class="dim">blog:</span> <a class="link" href="'+esc(l.blog)+'" target="_blank" rel="noopener noreferrer">'+esc(l.blog.replace(/^https?:\/\//,''))+'</a>');
+  bits.forEach(b => writeLine('  '+b));
+  if (R.focus && R.focus.length) { printBlank(); writeLine('  <span class="dim">currently going deeper on:</span>'); writeLine('  '+tagRow(R.focus)); }
+  printBlank();
+  writeLine('<span class="dim">next:</span> <span class="success">experience</span>  <span class="success">projects</span>  <span class="success">skills</span>  <span class="success">print</span>', 'dim');
+};
+COMMANDS.about = COMMANDS.whoami;
+
+COMMANDS.experience = (args) => {
+  let jobs = R.experience;
+  if (args && args[0]) {
+    const q = args[0].toLowerCase();
+    jobs = jobs.filter(j => j.id.includes(q) || j.company.toLowerCase().includes(q));
+    if (!jobs.length) { writeLine('experience: no match for \''+esc(args[0])+'\'', 'error'); return; }
+  }
+  sectionHead('EXPERIENCE');
+  jobs.forEach(j => writeLine(jobHtml(j)));
+};
+COMMANDS.xp = COMMANDS.work = COMMANDS.experience;
+
+COMMANDS.projects = (args) => {
+  let ps = R.projects;
+  if (args && args[0]) {
+    const q = args[0].toLowerCase();
+    ps = ps.filter(p => p.id.includes(q) || p.name.toLowerCase().includes(q));
+    if (!ps.length) { writeLine('projects: no match for \''+esc(args[0])+'\'', 'error'); return; }
+  }
+  sectionHead('PROJECTS');
+  ps.forEach(p => writeLine(projHtml(p)));
+};
+
+COMMANDS.skills = () => {
+  sectionHead('SKILLS');
+  Object.entries(R.skills).forEach(([k, v]) => {
+    writeLine('<div class="skillrow"><span class="k">'+esc(k)+'</span>'+tagRow(v)+'</div>');
+  });
+};
+
+COMMANDS.education = () => {
+  sectionHead('EDUCATION');
+  R.education.forEach(e => {
+    writeLine('<div class="job"><div class="hd"><span class="role">'+esc(e.degree)+'</span><span class="co">'+esc(e.school)+'</span><span class="when">'+esc(e.period)+'</span></div>'
+      + (e.notes ? '<ul><li>'+esc(e.notes)+'</li></ul>' : '') + '</div>');
+  });
+};
+COMMANDS.edu = COMMANDS.education;
+
+COMMANDS.awards = () => {
+  sectionHead('AWARDS & LEADERSHIP');
+  R.awards.forEach(a => {
+    writeLine('<div class="job"><div class="hd"><span class="role">'+esc(a.what)+'</span>'
+      + (a.org ? '<span class="co">'+esc(a.org)+'</span>' : '')
+      + (a.period ? '<span class="when">'+esc(a.period)+'</span>' : '') + '</div>'
+      + (a.note ? '<ul><li>'+esc(a.note)+'</li></ul>' : '') + '</div>');
+  });
+};
+COMMANDS.leadership = COMMANDS.awards;
+
+COMMANDS.certifications = () => {
+  sectionHead('CERTIFICATIONS');
+  R.certifications.forEach(c => writeLine('  <span class="amber">▸</span> '+esc(c)));
+};
+COMMANDS.certs = COMMANDS.certifications;
+
+COMMANDS.languages = () => {
+  sectionHead('LANGUAGES');
+  writeLine('  '+R.speaks.map(esc).join('<span class="dim"> · </span>'));
+};
+COMMANDS.speaks = COMMANDS.languages;
+
+COMMANDS.contact = () => {
+  sectionHead('CONTACT');
+  const l = R.links;
+  writeLine('  <span class="dim">email    </span> <a class="link" href="mailto:'+esc(R.email)+'">'+esc(R.email)+'</a>');
+  if (R.phone) writeLine('  <span class="dim">phone    </span> '+esc(R.phone));
+  Object.entries(l).forEach(([k,v]) => { if (v) writeLine('  <span class="dim">'+k.padEnd(9)+'</span> <a class="link" href="'+esc(v)+'" target="_blank" rel="noopener noreferrer">'+esc(v)+'</a>'); });
+  printBlank();
+  writeLine('<span class="dim">or type</span> <span class="success">mail</span> <span class="dim">to open a pre-filled draft.</span>');
+};
+
+COMMANDS.mail = () => {
+  const url = 'mailto:'+R.email+'?subject='+encodeURIComponent('Hello from your terminal résumé');
+  writeLine('<span class="success">opening your mail client…</span> <span class="dim">('+esc(R.email)+')</span>');
+  // ponytail: location.href, not window.open — popup blockers eat the latter
+  // and leave a blank tab behind when no mail client is registered.
+  try { location.href = url; } catch(e){}
+};
+
+COMMANDS.resume = () => {
+  COMMANDS.whoami(); printBlank();
+  COMMANDS.experience(); printBlank();
+  COMMANDS.projects(); printBlank();
+  COMMANDS.skills(); printBlank();
+  COMMANDS.awards(); printBlank();
+  COMMANDS.certifications(); printBlank();
+  COMMANDS.education(); printBlank();
+  writeLine('<span class="dim">type</span> <span class="success">print</span> <span class="dim">for a clean one-page PDF.</span>');
+};
+COMMANDS.cv = COMMANDS.resume;
+
+COMMANDS.print = () => {
+  writeLine('<span class="success">rendering print view…</span> <span class="dim">(choose "Save as PDF" in the dialog)</span>');
+  setTimeout(() => window.print(), 250);
+};
+// The browser names the saved PDF after document.title.
+addEventListener('beforeprint', () => { document.title = R.name + ' — Résumé'; });
+addEventListener('afterprint',  () => { document.title = R.name + ' — ' + R.title; });
+COMMANDS.download = COMMANDS.pdf = COMMANDS.print;
+
+// grep across every piece of résumé content
+function corpus() {
+  const rows = [];
+  rows.push({ where:'whoami', text:R.name+' — '+R.title+', '+R.location });
+  // one grep hit per sentence, not one giant paragraph.
+  // ponytail: split on the space AFTER a period rather than a lookbehind —
+  // regex lookbehind is a PARSE-time SyntaxError on Safari < 16.4, which
+  // would kill this whole script and render a blank page.
+  R.summary.replace(/\n+/g,' ').split('. ').forEach((s, i, a) => {
+    const t = (i < a.length - 1 ? s + '.' : s).trim();
+    if (t) rows.push({ where:'whoami', text:t });
+  });
+  R.experience.forEach(j => {
+    rows.push({ where:'experience/'+j.id, text:j.role+' @ '+j.company+' ('+j.period+')' });
+    j.bullets.forEach(b => rows.push({ where:'experience/'+j.id, text:b }));
+    if (j.stack) rows.push({ where:'experience/'+j.id, text:'stack: '+j.stack.join(', ') });
+  });
+  R.projects.forEach(p => {
+    rows.push({ where:'projects/'+p.id, text:p.name+' ('+p.lang+') — '+p.desc });
+    (p.bullets||[]).forEach(b => rows.push({ where:'projects/'+p.id, text:b }));
+  });
+  Object.entries(R.skills).forEach(([k,v]) => rows.push({ where:'skills', text:k+': '+v.join(', ') }));
+  R.education.forEach(e => rows.push({ where:'education', text:e.degree+', '+e.school+' ('+e.period+')'+(e.notes?' — '+e.notes:'') }));
+  R.awards.forEach(a => rows.push({ where:'awards', text:a.what+(a.org?' — '+a.org:'')+(a.note?' — '+a.note:'') }));
+  R.certifications.forEach(c => rows.push({ where:'certifications', text:c }));
+  return rows;
+}
+COMMANDS.grep = (args) => {
+  const q = args.join(' ').trim();
+  if (!q) { writeLine('usage: grep &lt;term&gt;', 'error'); writeLine('example: grep kubernetes', 'dim'); return; }
+  const needle = q.toLowerCase();
+  const hits = corpus().filter(r => r.text.toLowerCase().includes(needle));
+  if (!hits.length) { writeLine('grep: no match for \''+esc(q)+'\'', 'error'); playBell(); return; }
+  hits.forEach(r => {
+    const i = r.text.toLowerCase().indexOf(needle);
+    const marked = esc(r.text.slice(0,i)) + '<span class="hit">' + esc(r.text.slice(i, i+q.length)) + '</span>' + esc(r.text.slice(i+q.length));
+    writeLine('<span class="cyan">'+esc(r.where)+'</span><span class="dim">:</span> '+marked);
+  });
+  writeLine('<span class="dim">'+hits.length+' match'+(hits.length===1?'':'es')+'</span>');
+};
+
+COMMANDS.ls = (args) => {
+  const target = args[0] ? resolvePath(args[0]) : state.cwd;
+  const items = listDir(target);
+  if (!items) { writeLine('ls: cannot access \''+esc(args[0]||'')+'\': No such file or directory', 'error'); return; }
+  writeLine('<div class="listing">'+items.map(i =>
+    '<span class="file '+(i.cls || (i.type==='dir'?'dir':''))+'">'+esc(i.name)+'</span>').join('')+'</div>');
+};
+
+COMMANDS.cat = (args) => {
+  if (!args[0]) { writeLine('cat: missing file operand', 'error'); writeLine('try: cat README.md', 'dim'); return; }
+  if (!catFile(args[0])) writeLine('cat: '+esc(args[0])+': No such file or directory', 'error');
+};
+
+COMMANDS.cd = (args) => {
+  const t = args[0] || '~', r = resolvePath(t);
+  if (!isDir(r)) { writeLine('cd: '+esc(t)+': Not a directory', 'error'); return; }
+  state.cwd = r; updatePrompt();
+};
+COMMANDS.pwd = () => writeLine(state.cwd.replace('~', '/home/'+R.handle));
+
+COMMANDS.tree = () => {
+  const t = '.\n├── experience/\n'
+    + R.experience.map((j,i,a) => '│   '+(i===a.length-1?'└──':'├──')+' '+j.id+'.md').join('\n')
+    + '\n├── projects/\n'
+    + R.projects.map((p,i,a) => '│   '+(i===a.length-1?'└──':'├──')+' '+p.id+'.md').join('\n')
+    + '\n├── skills.txt\n├── awards.txt\n├── certifications.txt\n├── education.txt\n├── README.md\n└── .contact';
+  writeLine('<pre class="tree">'+esc(t)+'</pre>');
+};
+
+function wrapText(text, width) {
+  const words = text.split(' ');
+  const lines = []; let cur = '';
+  for (const w of words) {
+    if (cur && (cur + ' ' + w).length > width) { lines.push(cur); cur = w; }
+    else cur = cur ? cur + ' ' + w : w;
+  }
+  if (cur) lines.push(cur);
+  return lines;
+}
+// pixel-art sprite (24-bit ANSI half-block art, converted to HTML spans) —
+// too wide + too many distinct colors per row to sit beside the label
+// column like the old icon did, so it prints as its own block above the
+// stats instead of inline with them.
+const PIXEL_ART = [
+  '      <span style="color:rgb(0,0,0)">▄</span><span style="color:rgb(0,0,0);background:rgb(197,156,106)">▀</span><span style="color:rgb(0,0,0);background:rgb(0,0,0)">▀</span><span style="color:rgb(230,106,115)">▄</span><span style="color:rgb(230,106,115);background:rgb(255,197,57)">▀▀▀▀</span><span style="color:rgb(230,106,115)">▄▄</span>',
+  '     <span style="color:rgb(0,0,0)">▄</span><span style="color:rgb(0,0,0);background:rgb(197,156,106)">▀</span><span style="color:rgb(197,156,106);background:rgb(74,115,90)">▀</span><span style="color:rgb(0,0,0);background:rgb(0,0,0)">▀</span><span style="color:rgb(255,197,57);background:rgb(255,197,57)">▀</span><span style="color:rgb(230,106,115);background:rgb(255,197,57)">▀</span><span style="color:rgb(255,197,57);background:rgb(230,106,115)">▀</span><span style="color:rgb(230,106,115)">▀▀</span><span style="color:rgb(255,197,57);background:rgb(0,0,0)">▀▀</span><span style="color:rgb(0,0,0);background:rgb(255,205,57)">▀</span><span style="color:rgb(0,0,0);background:rgb(131,213,148)">▀</span><span style="color:rgb(0,0,0);background:rgb(0,0,0)">▀</span> <span style="color:rgb(0,0,0)">▄▄</span>',
+  '     <span style="color:rgb(0,0,0);background:rgb(0,0,0)">▀</span><span style="color:rgb(197,156,106);background:rgb(197,156,106)">▀</span><span style="color:rgb(74,115,90);background:rgb(74,115,90)">▀</span><span style="color:rgb(0,0,0);background:rgb(74,115,90)">▀</span><span style="color:rgb(230,106,115);background:rgb(0,0,0)">▀</span><span style="color:rgb(230,106,115)">▀</span><span style="color:rgb(0,0,0)">▄▄</span><span style="color:rgb(0,0,0);background:rgb(255,205,57)">▀</span><span style="color:rgb(255,205,57);background:rgb(131,213,148)">▀</span><span style="color:rgb(197,255,213);background:rgb(82,156,106)">▀</span><span style="color:rgb(131,213,148);background:rgb(0,0,0)">▀</span><span style="color:rgb(0,0,0);background:rgb(230,106,115)">▀</span><span style="color:rgb(230,106,115);background:rgb(0,0,0)">▀</span><span style="color:rgb(0,0,0);background:rgb(197,156,106)">▀</span><span style="color:rgb(197,156,106);background:rgb(74,115,90)">▀▀</span><span style="color:rgb(0,0,0);background:rgb(0,0,0)">▀</span> <span style="color:rgb(0,0,0)">▄▄▄</span>',
+  '    <span style="color:rgb(0,0,0);background:rgb(0,0,0)">▀</span><span style="color:rgb(197,156,106);background:rgb(197,156,106)">▀</span><span style="color:rgb(74,115,90);background:rgb(74,115,90)">▀</span><span style="color:rgb(74,115,90);background:rgb(65,65,65)">▀</span><span style="color:rgb(65,65,65);background:rgb(197,156,106)">▀</span><span style="color:rgb(0,0,0);background:rgb(82,156,106)">▀</span><span style="color:rgb(0,0,0);background:rgb(74,115,90)">▀</span><span style="color:rgb(74,115,90);background:rgb(255,205,57)">▀</span><span style="color:rgb(255,205,57);background:rgb(131,213,148)">▀</span><span style="color:rgb(131,213,148);background:rgb(74,115,90)">▀</span><span style="color:rgb(82,156,106);background:rgb(0,0,0)">▀</span><span style="color:rgb(0,0,0);background:rgb(131,213,148)">▀▀</span><span style="color:rgb(0,0,0);background:rgb(98,98,98)">▀</span><span style="color:rgb(197,156,106);background:rgb(0,0,0)">▀</span><span style="color:rgb(74,115,90);background:rgb(65,65,65)">▀</span><span style="color:rgb(74,115,90);background:rgb(74,115,90)">▀</span><span style="color:rgb(74,115,90);background:rgb(65,65,65)">▀</span><span style="color:rgb(0,0,0);background:rgb(255,205,57)">▀▀</span><span style="color:rgb(255,205,57);background:rgb(82,156,106)">▀▀▀</span><span style="color:rgb(0,0,0);background:rgb(255,205,57)">▀</span><span style="color:rgb(0,0,0)">▄</span>    <span style="color:rgb(65,65,65)">▄</span><span style="color:rgb(65,65,65);background:rgb(131,213,148)">▀</span><span style="color:rgb(65,65,65)">▄</span>',
+  '   <span style="color:rgb(0,0,0)">▄</span><span style="color:rgb(0,0,0);background:rgb(197,156,106)">▀</span><span style="color:rgb(197,156,106);background:rgb(82,156,106)">▀</span><span style="color:rgb(65,65,65);background:rgb(255,205,57)">▀</span><span style="color:rgb(255,205,57);background:rgb(82,156,106)">▀</span><span style="color:rgb(82,156,106);background:rgb(82,156,106)">▀</span><span style="color:rgb(74,115,90);background:rgb(255,205,57)">▀</span><span style="color:rgb(255,205,57);background:rgb(131,213,148)">▀</span><span style="color:rgb(131,213,148);background:rgb(74,115,90)">▀</span><span style="color:rgb(74,115,90);background:rgb(0,0,0)">▀</span><span style="color:rgb(0,0,0);background:rgb(65,65,65)">▀</span><span style="color:rgb(98,98,98);background:rgb(65,65,65)">▀</span><span style="color:rgb(131,213,148);background:rgb(98,98,98)">▀</span><span style="color:rgb(98,98,98);background:rgb(82,156,106)">▀</span><span style="color:rgb(131,213,148);background:rgb(82,156,106)">▀</span><span style="color:rgb(0,0,0);background:rgb(0,0,0)">▀</span><span style="color:rgb(74,115,90);background:rgb(131,213,148)">▀</span><span style="color:rgb(255,205,57);background:rgb(230,106,115)">▀▀</span><span style="color:rgb(82,156,106);background:rgb(230,106,115)">▀▀▀▀</span><span style="color:rgb(0,0,0);background:rgb(230,106,115)">▀</span><span style="color:rgb(0,0,0)">▀</span>    <span style="color:rgb(65,65,65)">▄</span><span style="color:rgb(65,65,65);background:rgb(82,156,106)">▀</span><span style="color:rgb(131,213,148);background:rgb(82,156,106)">▀</span><span style="color:rgb(65,65,65);background:rgb(230,106,115)">▀</span>',
+  '  <span style="color:rgb(0,0,0)">▄</span><span style="color:rgb(0,0,0);background:rgb(74,115,90)">▀</span><span style="color:rgb(197,156,106);background:rgb(255,205,57)">▀</span><span style="color:rgb(82,156,106);background:rgb(131,213,148)">▀</span><span style="color:rgb(82,156,106);background:rgb(255,205,57)">▀▀</span><span style="color:rgb(255,205,57);background:rgb(0,0,0)">▀</span><span style="color:rgb(65,65,65);background:rgb(230,106,115)">▀</span><span style="color:rgb(0,0,0);background:rgb(65,65,65)">▀</span><span style="color:rgb(65,65,65);background:rgb(131,213,148)">▀</span><span style="color:rgb(65,65,65);background:rgb(82,156,106)">▀</span><span style="color:rgb(82,156,106);background:rgb(131,213,148)">▀</span><span style="color:rgb(82,156,106);background:rgb(65,65,65)">▀</span><span style="color:rgb(65,65,65);background:rgb(0,0,0)">▀</span><span style="color:rgb(82,156,106);background:rgb(0,0,0)">▀</span><span style="color:rgb(0,0,0);background:rgb(65,65,65)">▀</span><span style="color:rgb(82,156,106);background:rgb(230,106,115)">▀</span><span style="color:rgb(230,106,115);background:rgb(255,238,131)">▀</span><span style="color:rgb(255,238,131);background:rgb(255,238,131)">▀</span><span style="color:rgb(230,106,115);background:rgb(255,238,131)">▀</span><span style="color:rgb(255,238,131);background:rgb(230,106,115)">▀▀▀</span><span style="color:rgb(255,238,131);background:rgb(255,238,131)">▀</span><span style="color:rgb(255,238,131);background:rgb(230,106,115)">▀</span><span style="color:rgb(230,106,115);background:rgb(255,238,131)">▀</span><span style="color:rgb(230,106,115)">▄</span>   <span style="color:rgb(65,65,65)">▀▀</span><span style="color:rgb(230,106,115)">▀</span><span style="color:rgb(255,197,57);background:rgb(230,106,115)">▀</span><span style="color:rgb(230,106,115);background:rgb(255,197,57)">▀</span><span style="color:rgb(230,106,115)">▄</span>',
+  '<span style="color:rgb(0,0,0)">▄</span><span style="color:rgb(0,0,0);background:rgb(74,115,90)">▀</span><span style="color:rgb(0,0,0);background:rgb(0,0,0)">▀</span><span style="color:rgb(82,156,106);background:rgb(131,213,148)">▀</span><span style="color:rgb(255,205,57);background:rgb(131,213,148)">▀</span><span style="color:rgb(255,205,57);background:rgb(82,156,106)">▀</span><span style="color:rgb(131,213,148);background:rgb(82,156,106)">▀</span><span style="color:rgb(65,65,65);background:rgb(74,115,90)">▀</span><span style="color:rgb(230,106,115);background:rgb(65,65,65)">▀</span><span style="color:rgb(65,65,65);background:rgb(255,205,57)">▀</span><span style="color:rgb(65,65,65);background:rgb(197,156,106)">▀</span><span style="color:rgb(197,156,106);background:rgb(65,65,65)">▀</span><span style="color:rgb(65,65,65);background:rgb(0,0,0)">▀</span><span style="color:rgb(131,213,148);background:rgb(255,205,57)">▀</span><span style="color:rgb(131,213,148);background:rgb(131,213,148)">▀</span><span style="color:rgb(0,0,0);background:rgb(230,106,115)">▀</span><span style="color:rgb(230,106,115);background:rgb(255,238,131)">▀▀</span><span style="color:rgb(255,238,131);background:rgb(230,106,115)">▀</span><span style="color:rgb(230,106,115);background:rgb(74,115,90)">▀</span><span style="color:rgb(230,106,115);background:rgb(65,65,65)">▀</span><span style="color:rgb(230,106,115);background:rgb(255,255,255)">▀</span><span style="color:rgb(0,0,0);background:rgb(131,213,148)">▀</span><span style="color:rgb(82,156,106);background:rgb(0,0,0)">▀</span><span style="color:rgb(65,65,65);background:rgb(131,213,148)">▀</span><span style="color:rgb(230,106,115);background:rgb(65,65,65)">▀</span><span style="color:rgb(255,238,131);background:rgb(230,106,115)">▀▀</span><span style="color:rgb(230,106,115);background:rgb(255,238,131)">▀</span><span style="color:rgb(230,106,115)">▄</span>   <span style="color:rgb(230,106,115)">▄</span><span style="color:rgb(230,106,115);background:rgb(255,238,131)">▀</span><span style="color:rgb(230,106,115);background:rgb(255,197,57)">▀</span><span style="color:rgb(255,197,57);background:rgb(230,106,115)">▀</span><span style="color:rgb(230,106,115)">▀</span>',
+  '<span style="color:rgb(0,0,0);background:rgb(0,0,0)">▀</span><span style="color:rgb(74,115,90);background:rgb(82,156,106)">▀</span><span style="color:rgb(0,0,0);background:rgb(0,0,0)">▀</span><span style="color:rgb(131,213,148);background:rgb(0,0,0)">▀</span><span style="color:rgb(74,115,90);background:rgb(0,0,0)">▀</span><span style="color:rgb(82,156,106);background:rgb(0,0,0)">▀</span><span style="color:rgb(255,205,57);background:rgb(65,65,65)">▀▀▀</span><span style="color:rgb(65,65,65);background:rgb(255,205,57)">▀▀</span><span style="color:rgb(255,205,57);background:rgb(131,213,148)">▀</span><span style="color:rgb(255,205,57);background:rgb(255,238,131)">▀</span><span style="color:rgb(131,213,148);background:rgb(255,238,131)">▀</span><span style="color:rgb(255,238,131);background:rgb(255,238,131)">▀▀▀</span><span style="color:rgb(230,106,115);background:rgb(255,238,131)">▀</span><span style="color:rgb(74,115,90);background:rgb(230,106,115)">▀</span><span style="color:rgb(65,65,65);background:rgb(65,65,65)">▀</span><span style="color:rgb(0,0,0);background:rgb(213,213,213)">▀</span><span style="color:rgb(65,65,65);background:rgb(74,115,90)">▀</span><span style="color:rgb(82,156,106);background:rgb(82,156,106)">▀</span><span style="color:rgb(74,115,90);background:rgb(131,213,148)">▀</span><span style="color:rgb(0,0,0);background:rgb(131,213,148)">▀</span><span style="color:rgb(131,213,148);background:rgb(131,213,148)">▀</span><span style="color:rgb(0,0,0);background:rgb(82,156,106)">▀</span><span style="color:rgb(230,106,115);background:rgb(230,106,115)">▀</span><span style="color:rgb(255,238,131);background:rgb(255,238,131)">▀</span><span style="color:rgb(255,238,131);background:rgb(230,106,115)">▀</span><span style="color:rgb(230,106,115);background:rgb(255,238,131)">▀</span><span style="color:rgb(230,106,115)">▄</span><span style="color:rgb(230,106,115);background:rgb(230,106,115)">▀</span><span style="color:rgb(255,238,131);background:rgb(255,238,131)">▀</span><span style="color:rgb(230,106,115);background:rgb(255,238,131)">▀</span><span style="color:rgb(255,197,57);background:rgb(230,106,115)">▀</span><span style="color:rgb(230,106,115)">▀</span>',
+  '<span style="color:rgb(0,0,0)">▀▀</span>    <span style="color:rgb(0,0,0);background:rgb(0,0,0)">▀</span><span style="color:rgb(255,205,57);background:rgb(0,0,0)">▀▀</span><span style="color:rgb(131,213,148);background:rgb(0,0,0)">▀</span><span style="color:rgb(255,238,131);background:rgb(0,0,0)">▀▀</span><span style="color:rgb(255,238,131);background:rgb(65,65,65)">▀</span><span style="color:rgb(230,106,115);background:rgb(74,115,90)">▀</span><span style="color:rgb(65,65,65);background:rgb(74,115,90)">▀▀</span><span style="color:rgb(74,115,90);background:rgb(65,65,65)">▀</span><span style="color:rgb(74,115,90);background:rgb(0,0,0)">▀▀▀</span><span style="color:rgb(65,65,65);background:rgb(0,0,0)">▀</span><span style="color:rgb(65,65,65);background:rgb(74,115,90)">▀</span><span style="color:rgb(255,255,255);background:rgb(0,0,0)">▀</span><span style="color:rgb(82,156,106);background:rgb(0,0,0)">▀</span><span style="color:rgb(0,0,0);background:rgb(65,65,65)">▀</span><span style="color:rgb(82,156,106);background:rgb(0,0,0)">▀</span><span style="color:rgb(131,213,148);background:rgb(0,0,0)">▀▀</span><span style="color:rgb(230,106,115)">▀</span><span style="color:rgb(255,238,131);background:rgb(230,106,115)">▀▀▀▀</span><span style="color:rgb(230,106,115)">▀▀</span>',
+  '           <span style="color:rgb(0,0,0);background:rgb(0,0,0)">▀</span><span style="color:rgb(74,115,90);background:rgb(74,115,90)">▀</span><span style="color:rgb(74,115,90);background:rgb(82,156,106)">▀</span><span style="color:rgb(82,156,106);background:rgb(82,156,106)">▀▀</span><span style="color:rgb(0,0,0);background:rgb(82,156,106)">▀</span><span style="color:rgb(0,0,0)">▄▄</span><span style="color:rgb(0,0,0);background:rgb(82,156,106)">▀</span><span style="color:rgb(74,115,90);background:rgb(82,156,106)">▀</span><span style="color:rgb(82,156,106);background:rgb(82,156,106)">▀</span><span style="color:rgb(82,156,106);background:rgb(74,115,90)">▀</span><span style="color:rgb(74,115,90);background:rgb(65,65,65)">▀</span><span style="color:rgb(65,65,65);background:rgb(98,98,98)">▀</span><span style="color:rgb(0,0,0);background:rgb(0,0,0)">▀</span><span style="color:rgb(74,115,90);background:rgb(74,115,90)">▀</span><span style="color:rgb(0,0,0);background:rgb(74,115,90)">▀</span><span style="color:rgb(0,0,0)">▄▄</span>  <span style="color:rgb(0,0,0)">▄▄</span>',
+  '           <span style="color:rgb(0,0,0)">▀</span><span style="color:rgb(74,115,90);background:rgb(0,0,0)">▀</span><span style="color:rgb(82,156,106);background:rgb(74,115,90)">▀</span><span style="color:rgb(82,156,106);background:rgb(82,156,106)">▀</span><span style="color:rgb(82,156,106);background:rgb(65,65,65)">▀</span><span style="color:rgb(98,98,98);background:rgb(65,65,65)">▀</span><span style="color:rgb(82,156,106);background:rgb(65,65,65)">▀</span><span style="color:rgb(82,156,106);background:rgb(230,106,115)">▀</span><span style="color:rgb(82,156,106);background:rgb(65,65,65)">▀</span><span style="color:rgb(65,65,65);background:rgb(65,65,65)">▀</span><span style="color:rgb(230,106,115);background:rgb(98,98,98)">▀</span><span style="color:rgb(65,65,65);background:rgb(98,98,98)">▀</span><span style="color:rgb(98,98,98);background:rgb(0,0,0)">▀</span><span style="color:rgb(0,0,0)">▀▀</span><span style="color:rgb(74,115,90);background:rgb(0,0,0)">▀▀▀</span><span style="color:rgb(74,115,90);background:rgb(74,115,90)">▀</span><span style="color:rgb(0,0,0);background:rgb(74,115,90)">▀</span><span style="color:rgb(0,0,0);background:rgb(197,156,106)">▀</span><span style="color:rgb(197,156,106);background:rgb(0,0,0)">▀▀</span><span style="color:rgb(0,0,0)">▀</span>',
+  '             <span style="color:rgb(0,0,0)">▀▀</span><span style="color:rgb(98,98,98);background:rgb(0,0,0)">▀▀▀▀▀▀</span><span style="color:rgb(0,0,0)">▀▀</span>      <span style="color:rgb(0,0,0)">▀▀▀</span><span style="color:rgb(197,156,106);background:rgb(0,0,0)">▀▀</span><span style="color:rgb(0,0,0);background:rgb(197,156,106)">▀</span><span style="color:rgb(0,0,0)">▄</span>',
+  '                                  <span style="color:rgb(0,0,0)">▀▀</span>',
+];
+
+COMMANDS.neofetch = () => {
+  const up = fmtUptime(Date.now()-state.bootTime);
+  const nSkills = Object.values(R.skills).reduce((n,a)=>n+a.length,0);
+  const years = R.experience.length;
+  writeLine('<pre class="neofetch pixel">'+PIXEL_ART.join('\n')+'</pre>');
+  const fields = [
+    { k:'handle',   v: '<span class="green">'+esc(R.handle)+'</span>@<span class="green">resume</span>' },
+    { k:'name',     v: esc(R.name) },
+    ...wrapText(R.title, 38).map((line,i) => ({ k: i===0 ? 'title' : '', v: esc(line) })),
+    { k:'location', v: esc(R.location) },
+    { k:'roles',    v: years },
+    { k:'projects', v: R.projects.length },
+    { k:'skills',   v: nSkills },
+    { k:'uptime',   v: up },
+    { k:'theme',    v: state.theme },
+  ];
+  const lines = fields.map(f => f.k ? '<span class="amber">'+f.k.padEnd(9)+'</span>'+f.v : ' '.repeat(9)+f.v);
+  writeLine('<pre class="neofetch">'+lines.join('\n')+'</pre>');
+};
+
+COMMANDS.theme = (args) => {
+  const n = args[0];
+  if (!n) { writeLine('available: '+Object.keys(THEMES).join(', '), 'dim'); writeLine('current: '+state.theme, 'success'); return; }
+  if (!THEMES[n]) { writeLine('theme: \''+esc(n)+'\' not found. available: '+Object.keys(THEMES).join(', '), 'error'); return; }
+  applyTheme(n); writeLine('theme: '+n, 'success');
+};
+COMMANDS.crt = (args) => {
+  state.crt = args[0]==='on' ? true : args[0]==='off' ? false : !state.crt;
+  $('crtOverlay').style.opacity = state.crt ? '1' : '0';
+  $('statusCrt').textContent = state.crt ? 'on' : 'off';
+  writeLine('crt: '+(state.crt?'on':'off'), 'success');
+};
+COMMANDS.sound = (args) => {
+  state.sound = args[0]==='on' ? true : args[0]==='off' ? false : !state.sound;
+  $('statusSound').textContent = state.sound ? 'on' : 'off';
+  if (state.sound) { ensureAudio(); playClick(); }
+  writeLine('sound: '+(state.sound?'on':'off'), 'success');
+};
+
+COMMANDS.clear = () => { output.innerHTML = ''; };
+COMMANDS.cls = COMMANDS.clear;
+COMMANDS.echo = a => writeLine(esc(a.join(' ')));
+COMMANDS.date = () => writeLine(new Date().toString());
+COMMANDS.history = () => {
+  if (!state.history.length) { writeLine('<span class="dim">[empty]</span>'); return; }
+  state.history.forEach((c,i) => writeLine('  <span class="dim">'+String(i+1).padStart(3,' ')+'</span>  '+esc(c)));
+};
+
+// easter eggs — cheap, and recruiters do try them
+COMMANDS.sudo   = () => { writeLine('<span class="error">'+esc(R.handle)+' is not in the sudoers file. This incident will be reported.</span>'); writeLine('<span class="dim">(to grant access, see `contact`)</span>'); };
+COMMANDS.hire   = () => { writeLine('<span class="success">✓ availability: open to conversations</span>'); writeLine('<span class="dim">the fastest path is</span> <span class="success">mail</span><span class="dim">.</span>'); };
+COMMANDS.exit   = () => writeLine('<span class="dim">there is no escape. this is the only window.</span>');
+COMMANDS.logout = COMMANDS.exit;
+COMMANDS.vim    = () => { writeLine('<span class="dim">you are already in a terminal. this would be redundant.</span>'); writeLine('<span class="dim">:q!</span>'); };
+COMMANDS.rm     = a => writeLine('rm: cannot remove \''+esc(a[0]||'')+'\': Permission denied', 'error');
+COMMANDS.npm = COMMANDS.pip = COMMANDS.apt = COMMANDS.brew = () => writeLine('<span class="dim">static site. nothing to install. nice try.</span>');
+
+// =================== HELP / MAN ===================
+const HELP_TEXT = `NAME
+    ${R.name.toLowerCase().replace(/\s+/g,'')} - an interactive résumé that behaves like a terminal
+
+SYNOPSIS
+    <command> [arguments]
+
+RÉSUMÉ
+    whoami            who I am, contact links included
+    experience [co]   roles, impact, stack        (alias: xp, work)
+    projects [name]   things I built
+    skills            the honest list
+    awards            hackathon wins, leadership  (alias: leadership)
+    certifications    course certificates         (alias: certs)
+    languages         spoken languages            (alias: speaks)
+    education         degree and coursework       (alias: edu)
+    contact           every way to reach me
+    resume            all of the above, in order  (alias: cv)
+    grep <term>       search every line of the résumé
+    print             clean one-page PDF          (alias: pdf, download)
+    mail              open a pre-filled email draft
+
+FILESYSTEM
+    ls [path]         list directory contents
+    cat <file>        print a file
+    cd <dir>          change directory
+    pwd               print working directory
+    tree              show the whole tree
+
+SETTINGS
+    theme [name]      amber | green | cyan | paper
+    crt [on|off]      toggle CRT scanlines
+    sound [on|off]    toggle keypress sound
+
+MISC
+    neofetch, history, date, echo, clear, help, man <cmd>
+
+KEYBOARD
+    Tab               autocomplete
+    Up / Down         command history
+    Right / End       accept ghost suggestion
+    Ctrl+L            clear      Ctrl+C   cancel line
+    Ctrl+P            print / save as PDF
+
+TIP
+    Link straight to a section:  ?c=experience   or   #projects`;
+
+const MAN_PAGES = {
+  grep: `GREP(1)\n\nNAME\n    grep - search the résumé\n\nSYNOPSIS\n    grep <term>\n\nDESCRIPTION\n    Case-insensitive substring search across every bullet, skill,\n    role and project description. Prints file:line style results.\n\nEXAMPLES\n    grep kubernetes\n    grep "led a team"`,
+  print: `PRINT(1)\n\nNAME\n    print - render a clean one-page résumé\n\nDESCRIPTION\n    Swaps to a print stylesheet (no CRT, black on white, real\n    typography) and opens the browser print dialog. Choose\n    "Save as PDF" to get a file you can attach to an application.\n\n    Ctrl+P does the same thing.`,
+  experience: `EXPERIENCE(1)\n\nNAME\n    experience - list roles\n\nSYNOPSIS\n    experience [company]\n\nDESCRIPTION\n    Without arguments, lists every role. With an argument, filters\n    to companies whose name or id contains it.\n\nEXAMPLES\n    experience\n    experience company-a`,
+  theme: `THEME(1)\n\nNAME\n    theme - change phosphor color\n\nSYNOPSIS\n    theme [amber|green|cyan|paper]\n\nDESCRIPTION\n    'paper' is the low-drama one, for when a recruiter opens this\n    on a projector. The choice is remembered.`,
+};
+
+let typingCancelled = false;
+async function typeOut(text, el, delay=3) {
+  typingCancelled = false; let buf='';
+  for (let i=0;i<text.length;i++) {
+    if (typingCancelled) { el.innerHTML = '<pre>'+esc(text)+'</pre>'; scrollBottom(); return; }
+    buf += text[i];
+    el.innerHTML = '<pre>'+esc(buf)+'</pre>';
+    if (i % 6 === 0) scrollBottom();
+    if (text[i] === '\n') await sleep(delay*2);
+    else if (text[i] !== ' ' && i % 2 === 0) await sleep(delay);
+  }
+  scrollBottom();
+}
+function printManPage(text) {
+  const d = document.createElement('div');
+  d.className = 'line man-page'; output.appendChild(d); scrollBottom();
+  typeOut(text, d);
+}
+COMMANDS.help = (args) => {
+  if (args[0]) return COMMANDS.man(args);
+  printManPage(HELP_TEXT);
+};
+COMMANDS.man = (args) => {
+  const c = args[0];
+  if (!c) { writeLine('What manual page do you want?', 'error'); writeLine('try: man grep, man print, man experience', 'dim'); return; }
+  if (MAN_PAGES[c]) printManPage(MAN_PAGES[c]);
+  else if (COMMANDS[c]) printManPage(c.toUpperCase()+'(1)\n\nNAME\n    '+c+' - no detailed manual available\n\nDESCRIPTION\n    The command exists. Type \''+c+'\' and find out.');
+  else writeLine('man: No manual entry for '+esc(c), 'error');
+};
+
+// =================== COMPLETION ===================
+function currentWord() {
+  const w = cmdInput.value.split(' ');
+  return { word:w[w.length-1], isFirst:w.length===1, cmd:w[0] };
+}
+function candidates(isFirst, cmd) {
+  if (isFirst) return Object.keys(COMMANDS);
+  if (cmd === 'cat' || cmd === 'ls' || cmd === 'cd') {
+    const items = listDir(state.cwd) || [];
+    return items.map(i => i.name).concat(state.cwd==='~' ? ['experience','projects','..','~'] : ['..','~']);
+  }
+  if (cmd === 'man' || cmd === 'help') return [...new Set(Object.keys(MAN_PAGES).concat(Object.keys(COMMANDS)))];
+  if (cmd === 'theme') return Object.keys(THEMES);
+  if (cmd === 'crt' || cmd === 'sound') return ['on','off'];
+  if (cmd === 'experience' || cmd === 'xp' || cmd === 'work') return R.experience.map(j=>j.id);
+  if (cmd === 'projects') return R.projects.map(p=>p.id);
+  return [];
+}
+function updateGhost() {
+  const { word, isFirst, cmd } = currentWord();
+  if (!word) { ghostText.textContent = ''; return; }
+  const m = candidates(isFirst, cmd).filter(c => c.toLowerCase().startsWith(word.toLowerCase()));
+  if (!m.length) { ghostText.textContent = ''; return; }
+  if (m.length === 1) { ghostText.textContent = m[0].slice(word.length); return; }
+  let prefix = m[0];
+  for (const x of m) while (!x.toLowerCase().startsWith(prefix.toLowerCase())) prefix = prefix.slice(0,-1);
+  ghostText.textContent = prefix.length > word.length ? prefix.slice(word.length) : '';
+}
+function acceptGhost() {
+  if (ghostText.textContent) {
+    cmdInput.value += ghostText.textContent;
+    typedText.textContent = cmdInput.value;
+    ghostText.textContent = ''; updateGhost(); playClick(); return;
+  }
+  const { word, isFirst, cmd } = currentWord();
+  if (word) {
+    const m = candidates(isFirst, cmd).filter(c => c.toLowerCase().startsWith(word.toLowerCase()));
+    if (m.length > 1) { writeLine('<span class="dim">'+m.map(esc).join('    ')+'</span>'); return; }
+  }
+  playBell();
+}
+
+// =================== HISTORY ===================
+function navHistory(dir) {
+  if (!state.history.length) return;
+  if (dir === -1) {
+    if (state.historyIndex === -1) state.historyIndex = state.history.length-1;
+    else if (state.historyIndex > 0) state.historyIndex--;
+    else return;
+  } else {
+    if (state.historyIndex === -1) return;
+    if (state.historyIndex < state.history.length-1) state.historyIndex++;
+    else { state.historyIndex = -1; cmdInput.value=''; typedText.textContent=''; ghostText.textContent=''; return; }
+  }
+  cmdInput.value = state.history[state.historyIndex];
+  typedText.textContent = cmdInput.value; ghostText.textContent = ''; updateGhost();
+}
+function saveHistory(c) {
+  if (state.history[state.history.length-1] !== c) state.history.push(c);
+  if (state.history.length > 100) state.history.shift();
+  state.historyIndex = -1;
+  try { localStorage.setItem('rsHistory', JSON.stringify(state.history)); } catch(e){}
+}
+
+// =================== PROMPT / SUBMIT ===================
+function promptHtml() {
+  const p = state.cwd === '~' ? ':~' : ':'+state.cwd;
+  return '<span style="color:var(--green)">'+esc(R.handle)+'@resume</span><span class="path">'+p+'</span>$';
+}
+function updatePrompt() { promptText.innerHTML = promptHtml(); statusPath.textContent = state.cwd; }
+
+function submitCommand(raw) {
+  const val = raw.trim();
+  writeLine(promptHtml()+' '+esc(val), 'cmd-echo');
+  if (!val) return;
+  saveHistory(val);
+  const [cmd, ...args] = val.split(/\s+/);
+  if (COMMANDS[cmd]) {
+    try { COMMANDS[cmd](args); }
+    catch (e) { writeLine('<span class="error">internal error: '+esc(e.message)+'</span>'); console.error(e); }
+  } else {
+    writeLine('<span class="error">'+esc(cmd)+': command not found</span>');
+    const near = Object.keys(COMMANDS).filter(c => c.startsWith(cmd.slice(0, Math.max(1, cmd.length-2)))).slice(0,3);
+    if (near.length) writeLine('<span class="dim">did you mean: '+near.map(s=>'`'+s+'`').join(' / ')+'?</span>');
+    writeLine('<span class="dim">type \'help\' for commands.</span>');
+    playBell();
+  }
+}
+
+// =================== INPUT ===================
+cmdInput.addEventListener('keydown', e => {
+  typingCancelled = true;
+  if (e.key === 'Enter') {
+    e.preventDefault(); submitCommand(cmdInput.value);
+    cmdInput.value=''; typedText.textContent=''; ghostText.textContent=''; playClick();
+  } else if (e.key === 'Tab') { e.preventDefault(); acceptGhost(); }
+  else if (e.key === 'ArrowUp') { e.preventDefault(); navHistory(-1); }
+  else if (e.key === 'ArrowDown') { e.preventDefault(); navHistory(1); }
+  else if ((e.key === 'ArrowRight' || e.key === 'End') && ghostText.textContent) {
+    e.preventDefault(); cmdInput.value += ghostText.textContent;
+    typedText.textContent = cmdInput.value; ghostText.textContent=''; updateGhost(); playClick();
+  }
+  else if (e.key === 'l' && e.ctrlKey) { e.preventDefault(); output.innerHTML=''; }
+  else if (e.key === 'c' && e.ctrlKey) {
+    e.preventDefault();
+    writeLine(promptHtml()+' '+esc(cmdInput.value)+'<span class="error">^C</span>', 'cmd-echo');
+    cmdInput.value=''; typedText.textContent=''; ghostText.textContent='';
+  }
+});
+cmdInput.addEventListener('input', () => { typedText.textContent = cmdInput.value; updateGhost(); playClick(); });
+cmdInput.addEventListener('paste', () => setTimeout(() => { typedText.textContent = cmdInput.value; updateGhost(); }, 0));
+document.querySelector('.terminal').addEventListener('click', () => { if (!window.getSelection().toString()) cmdInput.focus(); });
+$('btnPrint').addEventListener('click', () => COMMANDS.print());
+
+// =================== CLOCK ===================
+function fmtUptime(ms) {
+  const s = Math.floor(ms/1000), h = Math.floor(s/3600), m = Math.floor((s%3600)/60);
+  return h ? h+'h '+m+'m' : m ? m+'m '+(s%60)+'s' : s+'s';
+}
+function tick() {
+  const d = new Date(), p = n => String(n).padStart(2,'0');
+  statusTime.textContent = p(d.getHours())+':'+p(d.getMinutes())+':'+p(d.getSeconds());
+}
+setInterval(tick, 1000); tick();
+
+// =================== PRINT VIEW ===================
+function buildPrintable() {
+  const l = R.links, meta = [R.title, R.location, R.email, R.phone,
+    l.github && l.github.replace(/^https?:\/\//,''),
+    l.linkedin && l.linkedin.replace(/^https?:\/\//,''),
+    l.website && l.website.replace(/^https?:\/\//,''),
+    l.blog && l.blog.replace(/^https?:\/\//,'')].filter(Boolean);
+  let h = '<h1>'+esc(R.name)+'</h1><div class="meta">'+meta.map(esc).join('  ·  ')+'</div>';
+  h += R.summary.split(/\n{2,}/).map(para =>
+    '<p>'+esc(para.replace(/^>\s*/,'').replace(/\n/g,' '))+'</p>').join('');
+  h += '<h2>Experience</h2>';
+  R.experience.forEach(j => {
+    h += '<div class="p-job"><div><span class="w">'+esc(j.period)+'</span><span class="r">'+esc(j.role)+'</span> — '+esc(j.company)+(j.location?', '+esc(j.location):'')+'</div>'
+       + '<ul>'+j.bullets.map(b=>'<li>'+esc(b)+'</li>').join('')+'</ul>'
+       + (j.stack && j.stack.length ? '<div class="p-tags">'+esc(j.stack.join(' · '))+'</div>' : '') + '</div>';
+  });
+  h += '<h2>Projects</h2>';
+  R.projects.forEach(p => {
+    h += '<div class="p-job"><div><span class="w">'+esc(p.lang||'')+'</span><span class="r">'+esc(p.name)+'</span> — '+esc(p.desc)+'</div>'
+       + ((p.bullets&&p.bullets.length) ? '<ul>'+p.bullets.map(b=>'<li>'+esc(b)+'</li>').join('')+'</ul>' : '')
+       + (p.link ? '<div class="p-tags">'+esc(p.link.replace(/^https?:\/\//,''))+'</div>' : '') + '</div>';
+  });
+  h += '<h2>Skills</h2>';
+  Object.entries(R.skills).forEach(([k,v]) => h += '<div><span class="r">'+esc(k)+':</span> '+esc(v.join(', '))+'</div>');
+  h += '<h2>Awards &amp; Leadership</h2>';
+  R.awards.forEach(a => h += '<div class="p-job"><div>'+(a.period?'<span class="w">'+esc(a.period)+'</span>':'')+'<span class="r">'+esc(a.what)+'</span>'+(a.org?' — '+esc(a.org):'')+'</div>'+(a.note?'<ul><li>'+esc(a.note)+'</li></ul>':'')+'</div>');
+  h += '<h2>Certifications</h2><div class="p-tags">'+esc(R.certifications.join(' · '))+'</div>';
+  h += '<h2>Education</h2>';
+  R.education.forEach(e => h += '<div class="p-job"><div><span class="w">'+esc(e.period)+'</span><span class="r">'+esc(e.degree)+'</span> — '+esc(e.school)+'</div>'+(e.notes?'<ul><li>'+esc(e.notes)+'</li></ul>':'')+'</div>');
+  $('printable').innerHTML = h;
+}
+
+// =================== BOOT ===================
+async function boot() {
+  // ponytail: the <title> is already set in the HTML for SEO/social cards.
+  // Don't overwrite it here — the browser also uses it as the saved-PDF
+  // filename, and "~/resume" makes for an ugly one.
+  $('statusUser').textContent = R.handle;
+  applyTheme(state.theme);
+  updatePrompt();
+  buildPrintable();
+
+  const nSkills = Object.values(R.skills).reduce((n,a)=>n+a.length,0);
+  const lines = [
+    ['[ <span class="ok">OK</span> ] resume shell v1.0 starting…', 70],
+    ['[ <span class="ok">OK</span> ] mounting <span class="cyan">/experience</span> <span class="dim">('+R.experience.length+' roles)</span>', 100],
+    ['[ <span class="ok">OK</span> ] mounting <span class="cyan">/projects</span> <span class="dim">('+R.projects.length+' entries)</span>', 90],
+    ['[ <span class="ok">OK</span> ] indexing skills <span class="dim">('+nSkills+' keywords)</span>', 80],
+    ['[ <span class="ok">OK</span> ] loading phosphor drivers <span class="dim">['+state.theme+']</span>', 70],
+    ['[ <span class="warn">WARN</span> ] sound off <span class="dim">(type \'sound on\')</span>', 55],
+    ['', 90],
+  ];
+  for (const [t,d] of lines) { writeLine(t, 'boot-line'); await sleep(d); }
+
+  // ponytail: no box art — box-drawing glyphs fall back to a different font
+  // and the right border stops lining up. A left rule always lines up.
+  writeLine(rule());
+  writeLine('  <span class="amber" style="font-weight:600">' + esc(R.name) + '</span> <span class="dim">—</span> ' + esc(R.title) + ' <span class="dim">·</span> ' + esc(R.location));
+  printBlank();
+  writeLine('  type <span class="success">whoami</span> to start <span class="dim">·</span> <span class="success">resume</span> for everything <span class="dim">·</span> <span class="success">help</span> for all');
+  writeLine('  <span class="dim">in a hurry?</span> <span class="success">print</span> <span class="dim">gives you a one-page PDF.</span>');
+  writeLine(rule());
+  printBlank();
+
+  // deep link: ?c=experience  or  #projects
+  const params = new URLSearchParams(location.search);
+  const deep = params.get('c') || location.hash.slice(1);
+  if (deep) {
+    const clean = decodeURIComponent(deep).trim();
+    if (clean) { await sleep(200); submitCommand(clean); }
+  }
+  cmdInput.focus();
+}
+boot();
+</script>
 </body>
-
 </html>

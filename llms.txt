@@ -1,0 +1,19 @@
+# Advait Jain
+
+> Backend engineer — Kafka, Golang, distributed systems, event-driven
+> architecture, GenAI. This site is a single-page interactive résumé driven
+> from a terminal-style prompt rather than a scrolling document.
+
+## Contact
+- Email: aj.advaitj@gmail.com
+- GitHub: https://github.com/Zoronium
+- LinkedIn: https://linkedin.com/in/advaitj
+- Blog: https://zoronium.hashnode.dev
+
+## Site
+- [index.html](index.html): the résumé. All content (experience, projects,
+  skills, education, awards) lives in one `R` data object near the top of
+  the page's script — that object is the source of truth, this file is a
+  summary of it for crawlers and should not be treated as more current.
+- At the prompt, `resume` prints everything in order; `grep <term>` searches
+  every bullet, skill, and role by keyword.
